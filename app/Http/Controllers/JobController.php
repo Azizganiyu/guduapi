@@ -15,7 +15,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $data = job::paginate(20);
+        $data = job::withCount('artisans')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Jobs Retreived'], 200);
     }
 

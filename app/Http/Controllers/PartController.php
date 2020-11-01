@@ -15,7 +15,7 @@ class PartController extends Controller
      */
     public function index()
     {
-        $data = Part::with('category')->paginate(20);
+        $data = Part::withCount('products')->with('category')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Parts Retreived'], 200);
     }
 

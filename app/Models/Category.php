@@ -17,4 +17,8 @@ class Category extends Model
     public function make(){
         return $this->hasMany(Make::class);
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

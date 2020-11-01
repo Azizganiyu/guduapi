@@ -12,4 +12,8 @@ class job extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function artisans(){
+        return $this->hasMany(Artisan::class);
+    }
 }

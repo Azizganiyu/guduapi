@@ -15,7 +15,7 @@ class ConditionController extends Controller
      */
     public function index()
     {
-        $data = Condition::paginate(20);
+        $data = Condition::withCount('products')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Conditions Retreived'], 200);
     }
 

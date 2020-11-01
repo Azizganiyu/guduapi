@@ -17,4 +17,8 @@ class Part extends Model
     public function category(){
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

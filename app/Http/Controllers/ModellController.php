@@ -15,7 +15,7 @@ class ModellController extends Controller
      */
     public function index()
     {
-        $data = Modell::with('category', 'make')->paginate(20);
+        $data = Modell::withCount('products')->with('category', 'make')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Models Retreived'], 200);
     }
 

@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $data = Category::paginate(20);
+        $data = Category::withCount('products')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Categories Retreived'], 200);
     }
 

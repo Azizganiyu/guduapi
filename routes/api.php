@@ -82,10 +82,24 @@ Route::group(['prefix' => 'products', 'middleware' => ['auth:sanctum']], functio
     Route::get('/{product}', 'App\Http\Controllers\ProductController@getProduct');
 });
 
+Route::group(['prefix' => 'artisans', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/', 'App\Http\Controllers\ArtisanController@index');
+    Route::post('/create', 'App\Http\Controllers\ArtisanController@store');
+    Route::post('/update/{artisan}', 'App\Http\Controllers\ArtisanController@update');
+    Route::post('/delete/{artisan?}', 'App\Http\Controllers\ArtisanController@destroy');
+    Route::post('/enable/{artisan?}', 'App\Http\Controllers\ArtisanController@enable');
+    Route::post('/disable/{artisan?}', 'App\Http\Controllers\ArtisanController@disable');
+    Route::get('/{artisan}', 'App\Http\Controllers\ArtisanController@getArtisan');
+});
+
 Route::group(['prefix' => 'gallery', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\GalleryController@index');
     Route::post('/upload', 'App\Http\Controllers\GalleryController@store');
     Route::post('/delete/{gallery}', 'App\Http\Controllers\GalleryController@destroy');
+});
+
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/analytics', 'App\Http\Controllers\Dashboard@getAnalytics');
 });
 
 //Route::middleware('auth:sanctum')->get('/users', 'App\Http\Controllers\UserController@index');

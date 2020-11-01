@@ -32,6 +32,9 @@ class Product extends Model
         'friendly_url',
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
     public function category(){
         return $this->hasOne(Category::class, 'id', 'category_id');
     }

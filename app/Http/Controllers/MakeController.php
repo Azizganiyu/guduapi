@@ -15,7 +15,7 @@ class MakeController extends Controller
      */
     public function index()
     {
-        $data = Make::with('category')->paginate(20);
+        $data = Make::withCount('products')->with('category')->paginate(20);
         return response()->json(['data' => $data, 'message' => 'makes Retreived'], 200);
     }
 

@@ -22,4 +22,8 @@ class Modell extends Model
     public function make(){
         return $this->hasOne(Make::class, 'id', 'make_id');
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }
