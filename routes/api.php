@@ -37,49 +37,84 @@ Route::group(['prefix' => 'jobs', 'middleware' => ['auth:sanctum']], function ()
     Route::post('/delete/{job?}', 'App\Http\Controllers\JobController@destroy');
 });
 
-Route::group(['prefix' => 'categories', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'categories'], function () {
     Route::get('/', 'App\Http\Controllers\CategoryController@index');
+});
+
+Route::group(['prefix' => 'categories', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\CategoryController@store');
     Route::post('/update/{category}', 'App\Http\Controllers\CategoryController@update');
     Route::post('/delete/{category?}', 'App\Http\Controllers\CategoryController@destroy');
 });
 
-Route::group(['prefix' => 'conditions', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'conditions'], function () {
     Route::get('/', 'App\Http\Controllers\ConditionController@index');
+});
+
+Route::group(['prefix' => 'conditions', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\ConditionController@store');
     Route::post('/update/{condition}', 'App\Http\Controllers\ConditionController@update');
     Route::post('/delete/{condition?}', 'App\Http\Controllers\ConditionController@destroy');
 });
 
-Route::group(['prefix' => 'makes', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'makes'], function () {
     Route::get('/', 'App\Http\Controllers\MakeController@index');
+});
+
+Route::group(['prefix' => 'makes', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\MakeController@store');
     Route::post('/update/{make}', 'App\Http\Controllers\MakeController@update');
     Route::post('/delete/{make?}', 'App\Http\Controllers\MakeController@destroy');
 });
 
-Route::group(['prefix' => 'models', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'models'], function () {
     Route::get('/', 'App\Http\Controllers\ModellController@index');
+});
+
+Route::group(['prefix' => 'models', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\ModellController@store');
     Route::post('/update/{model}', 'App\Http\Controllers\ModellController@update');
     Route::post('/delete/{model?}', 'App\Http\Controllers\ModellController@destroy');
 });
 
-Route::group(['prefix' => 'parts', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'parts'], function () {
     Route::get('/', 'App\Http\Controllers\PartController@index');
+});
+
+Route::group(['prefix' => 'parts', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\PartController@store');
     Route::post('/update/{part}', 'App\Http\Controllers\PartController@update');
     Route::post('/delete/{part?}', 'App\Http\Controllers\PartController@destroy');
 });
 
-Route::group(['prefix' => 'products', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'years'], function () {
+    Route::get('/', 'App\Http\Controllers\YearController@index');
+    Route::get('/groupedyears/{model}', 'App\Http\Controllers\YearController@getGroupedYears');
+});
+
+Route::group(['prefix' => 'years', 'middleware' => ['auth:sanctum']], function () {
+    Route::post('/create', 'App\Http\Controllers\YearController@store');
+    Route::post('/update/{year}', 'App\Http\Controllers\YearController@update');
+    Route::post('/delete/{year?}', 'App\Http\Controllers\YearController@destroy');
+});
+
+
+Route::group(['prefix' => 'products'], function () {
     Route::get('/', 'App\Http\Controllers\ProductController@index');
+    Route::get('/url/{url}', 'App\Http\Controllers\ProductController@getProductByUrl');
+    Route::get('/trending/{category}', 'App\Http\Controllers\ProductController@trending');
+    Route::get('/hotdeals', 'App\Http\Controllers\ProductController@hotDeals');
+    Route::post('/listings', 'App\Http\Controllers\ProductController@getProductsListings');
+    Route::post('/related', 'App\Http\Controllers\ProductController@getRelatedProducts');
+    Route::get('/{product}', 'App\Http\Controllers\ProductController@getProduct');
+});
+
+Route::group(['prefix' => 'products', 'middleware' => ['auth:sanctum']], function () {
     Route::post('/create', 'App\Http\Controllers\ProductController@store');
     Route::post('/update/{product}', 'App\Http\Controllers\ProductController@update');
     Route::post('/delete/{product?}', 'App\Http\Controllers\ProductController@destroy');
     Route::post('/enable/{product?}', 'App\Http\Controllers\ProductController@enable');
     Route::post('/disable/{product?}', 'App\Http\Controllers\ProductController@disable');
-    Route::get('/{product}', 'App\Http\Controllers\ProductController@getProduct');
 });
 
 Route::group(['prefix' => 'artisans', 'middleware' => ['auth:sanctum']], function () {
