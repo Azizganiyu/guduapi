@@ -191,11 +191,11 @@ class ProductController extends Controller
         $data_len = 0;
         $data = null;
 
-        if(strlen($request->vin_number) > 0){
+        if(strlen($vin_number) > 0){
             $data = product::where('vin_tag', $request->vin_number);
             $data_len = $data->count();
         }
-        if($data_len === 0 && strlen($request->part_number) > 0){
+        if($data_len === 0 && strlen($part_number) > 0){
             $data = product::where('part_number', $request->part_number);
             $data_len = $data->count();
         }

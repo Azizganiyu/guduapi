@@ -75,4 +75,8 @@ class User extends Authenticatable
     public function parts(){
         return $this->hasMany(Part::class);
     }
+
+    public function cart(){
+        return $this->hasOne(Cart::class);
+    }
 }

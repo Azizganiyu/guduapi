@@ -99,6 +99,19 @@ Route::group(['prefix' => 'years', 'middleware' => ['auth:sanctum']], function (
 });
 
 
+Route::group(['prefix' => 'artisan_request', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/', 'App\Http\Controllers\ArtisanRequestController@index');
+    Route::post('/create', 'App\Http\Controllers\ArtisanRequestController@store');
+    Route::post('/delete/{artisan_request?}', 'App\Http\Controllers\ArtisanRequestController@destroy');
+});
+
+Route::group(['prefix' => 'cart', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/', 'App\Http\Controllers\CartController@index');
+    Route::post('/save', 'App\Http\Controllers\CartController@store');
+    Route::get('/delete', 'App\Http\Controllers\CartController@destroy');
+});
+
+
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', 'App\Http\Controllers\ProductController@index');
     Route::get('/url/{url}', 'App\Http\Controllers\ProductController@getProductByUrl');
