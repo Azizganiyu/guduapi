@@ -42,6 +42,7 @@ Route::group(['prefix' => 'jobs', 'middleware' => ['auth:sanctum']], function ()
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\OrderController@index');
     Route::post('/create', 'App\Http\Controllers\OrderController@store');
+    Route::get('/code/{order_code}', 'App\Http\Controllers\OrderController@getOrderByCode');
     Route::post('/delete/{order?}', 'App\Http\Controllers\OrderController@destroy');
     Route::post('/decline/{order?}', 'App\Http\Controllers\OrderController@decline');
 });

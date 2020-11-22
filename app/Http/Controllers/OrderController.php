@@ -52,7 +52,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Error Creating Order'], 500);
         }
 
-        return response()->json(['message' => 'Order successfully created'], 201);
+        return response()->json(['code' => $request->order_code, 'message' => 'Order successfully created'], 201);
     }
 
     // /**
@@ -99,5 +99,15 @@ class OrderController extends Controller
             }
         }
         return response()->json(['message' => 'Order(s) successfully declined'], 200);
+    }
+
+    public function getOrderByCode($order_code){
+        $data = Order::where('order_code', $order_code)->with('user')->first();
+
+        if($data){
+           return response()->json(['data' => $data, 'message' => 'Order Retreived'], 200);
+        }
+
+        return response()->json(['message' => 'Order not found'], 404);
     }
 }
