@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\UserController@index');
+    Route::get('/address', 'App\Http\Controllers\UserController@getAddress');
+    Route::post('/address/save', 'App\Http\Controllers\UserController@saveAddress');
     Route::post('/block/{user?}', 'App\Http\Controllers\UserController@block');
     Route::post('/unblock/{user?}', 'App\Http\Controllers\UserController@unblock');
     Route::post('/delete/{user?}', 'App\Http\Controllers\UserController@delete');
@@ -35,6 +37,13 @@ Route::group(['prefix' => 'jobs', 'middleware' => ['auth:sanctum']], function ()
     Route::post('/create', 'App\Http\Controllers\JobController@store');
     Route::post('/update/{job}', 'App\Http\Controllers\JobController@update');
     Route::post('/delete/{job?}', 'App\Http\Controllers\JobController@destroy');
+});
+
+Route::group(['prefix' => 'orders', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/', 'App\Http\Controllers\OrderController@index');
+    Route::post('/create', 'App\Http\Controllers\OrderController@store');
+    Route::post('/delete/{order?}', 'App\Http\Controllers\OrderController@destroy');
+    Route::post('/decline/{order?}', 'App\Http\Controllers\OrderController@decline');
 });
 
 Route::group(['prefix' => 'categories'], function () {
@@ -103,6 +112,7 @@ Route::group(['prefix' => 'artisan_request', 'middleware' => ['auth:sanctum']], 
     Route::get('/', 'App\Http\Controllers\ArtisanRequestController@index');
     Route::post('/create', 'App\Http\Controllers\ArtisanRequestController@store');
     Route::post('/delete/{artisan_request?}', 'App\Http\Controllers\ArtisanRequestController@destroy');
+    Route::post('/decline/{artisan_request?}', 'App\Http\Controllers\ArtisanRequestController@decline');
 });
 
 Route::group(['prefix' => 'cart', 'middleware' => ['auth:sanctum']], function () {

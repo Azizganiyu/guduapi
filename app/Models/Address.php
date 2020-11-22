@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ArtisanRequest extends Model
+class Address extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'job_id',
-        'description',
         'address',
-        'landmark',
-        'phone',
         'state',
+        'user_id',
         'city',
-        'status',
+        'first_name',
+        'last_name',
+        'phone',
     ];
-
-    public function job(){
-        return $this->hasOne(job::class, 'id', 'job_id');
-    }
 
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');

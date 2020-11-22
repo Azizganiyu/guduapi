@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArtisanRequestsTable extends Migration
+class CreateAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateArtisanRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('artisan_requests', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
+
             $table->string('address');
-            $table->string('landmark');
-            $table->string('phone');
             $table->string('state');
             $table->string('city');
-            $table->string('status');
-            $table->unsignedBigInteger('job_id');
-            $table->foreign('job_id')->references('id')->on('jobs');
+            $table->string('phone');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
@@ -37,6 +35,6 @@ class CreateArtisanRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artisan_requests');
+        Schema::dropIfExists('addresses');
     }
 }

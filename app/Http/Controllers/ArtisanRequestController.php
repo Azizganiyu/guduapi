@@ -45,6 +45,7 @@ class ArtisanRequestController extends Controller
         $artisan_request->landmark = $request->landmark;
         $artisan_request->state = $request->state;
         $artisan_request->city = $request->city;
+        $artisan_request->status = 'pending';
 
         if(!$artisan_request->save()){
             return response()->json(['message' => 'Error sending request'], 500);
@@ -83,33 +84,33 @@ class ArtisanRequestController extends Controller
                 $artisan_request->delete();
             }
         }
-        return response()->json(['message' => 'ArtisanRequest(s) successfull deleted'], 200);
+        return response()->json(['message' => 'ArtisanRequest(s) successfully deleted'], 200);
     }
 
-    public function disable(Request $request, ArtisanRequest $artisan_request = null){
+    public function decline(Request $request, ArtisanRequest $artisan_request = null){
 
         if($artisan_request){
-            $artisan_request->update(['status' => 0]);
+            $artisan_request->update(['status' => 'declined']);
         }
         elseif($request->ids){
             foreach($request->ids as $id){
                 $artisan_request = ArtisanRequest::find($id);
-                $artisan_request->update(['status' => 0]);
+                $artisan_request->update(['status' => 'declined']);
             }
         }
-        return response()->json(['message' => 'ArtisanRequest(s) successfull disabled'], 200);
+        return response()->json(['message' => 'ArtisanRequest(s) successfully declined'], 200);
     }
 
-    public function enable(Request $request, ArtisanRequest $artisan_request = null){
-        if($artisan_request){
-            $artisan_request->update(['status' => 1]);
-        }
-        elseif($request->ids){
-            foreach($request->ids as $id){
-                $artisan_request = ArtisanRequest::find($id);
-                $artisan_request->update(['status' => 1]);
-            }
-        }
-        return response()->json(['message' => 'ArtisanRequest(s) successfull enabled'], 200);
-    }
+    // public function enable(Request $request, ArtisanRequest $artisan_request = null){
+    //     if($artisan_request){
+    //         $artisan_request->update(['status' => 1]);
+    //     }
+    //     elseif($request->ids){
+    //         foreach($request->ids as $id){
+    //             $artisan_request = ArtisanRequest::find($id);
+    //             $artisan_request->update(['status' => 1]);
+    //         }
+    //     }
+    //     return response()->json(['message' => 'ArtisanRequest(s) successfull enabled'], 200);
+    // }
 }

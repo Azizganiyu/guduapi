@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\createUser;
+use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -69,5 +70,30 @@ class UserController extends Controller
             }
         }
         return response()->json(['message' => 'User(s) successfull deleted'], 200);
+    }
+
+    public function getAddress(){
+        $data = auth()->user()->address;
+        return response()->json(['data' => $data, 'message' => 'Address Retreived'], 200);
+    }
+
+    public function saveAddress(Request $request)
+    {
+
+        $user_id = auth()->user()->id;
+
+       Address::updateOrCreate(
+            ['user_id' => $user_id],
+            [
+                'address' => $request->address,
+                'state' => $request->state,
+                'city' => $request->city,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'phone' => $request->phone,
+            ]
+        );
+
+        return response()->json(['message' => 'Address successfully saved'], 201);
     }
 }
