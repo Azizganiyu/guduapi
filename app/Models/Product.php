@@ -54,5 +54,8 @@ class Product extends Model
         return $this->hasOne(Year::class, 'id', 'year_id');
     }
 
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
 
 }

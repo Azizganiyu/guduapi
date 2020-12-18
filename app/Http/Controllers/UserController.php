@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\createUser;
+use App\Http\Requests\updateUser;
 use App\Models\Address;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -95,5 +99,46 @@ class UserController extends Controller
         );
 
         return response()->json(['message' => 'Address successfully saved'], 201);
+    }
+
+    public function updateUser(updateUser $request){
+        $id = auth()->user()->id;
+        $user = User::find($id);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        if($user->save()){
+             return response()->json(['message' => 'user successfully updated'], 200);
+        }
+        else{
+            return response()->json(['message' => 'An error has occured, unable to update user'], 500);
+        }
+    }
+
+    public function changePassword(Request $request){
+        $request->validate([
+            'password' => 'required',
+            'new_password' => 'required',
+            'confirm_new_password' => 'required',
+        ]);
+
+        $user = User::where('email', auth()->user()->email)->first();
+        if ( ! Hash::check($request->password, $user->password, [])) {
+            return response()->json([
+                'message' => 'Invalid Password'
+            ], 500);
+        }
+
+        if($request->new_password != $request->confirm_new_password){
+            return response()->json(['message' => 'Password does not match'], 400);
+        }
+
+        $user->password = bcrypt($request->new_password);
+
+        if(!$user->save()){
+            return response()->json(['message' => 'Error changing password'], 500);
+        }
+
+        return response()->json(['message' => 'Password successfully changed!'], 200);
     }
 }

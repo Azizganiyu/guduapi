@@ -40,7 +40,6 @@ class CreateProductsTable extends Migration
             $table->integer('depth')->nullable();
             $table->integer('discount')->default(0);
             $table->integer('quantity');
-            $table->integer('rating');
             $table->integer('price');
             $table->text('tags')->nullable();
             $table->boolean('status')->default(1);

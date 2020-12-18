@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\UserController@index');
     Route::get('/address', 'App\Http\Controllers\UserController@getAddress');
+    Route::post('/update', 'App\Http\Controllers\UserController@updateUser');
+    Route::post('/change_password', 'App\Http\Controllers\UserController@changePassword');
     Route::post('/address/save', 'App\Http\Controllers\UserController@saveAddress');
     Route::post('/block/{user?}', 'App\Http\Controllers\UserController@block');
     Route::post('/unblock/{user?}', 'App\Http\Controllers\UserController@unblock');
@@ -41,6 +43,7 @@ Route::group(['prefix' => 'jobs', 'middleware' => ['auth:sanctum']], function ()
 
 Route::group(['prefix' => 'orders', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\OrderController@index');
+    Route::get('/user', 'App\Http\Controllers\OrderController@getOrder');
     Route::post('/create', 'App\Http\Controllers\OrderController@store');
     Route::get('/code/{order_code}', 'App\Http\Controllers\OrderController@getOrderByCode');
     Route::post('/delete/{order?}', 'App\Http\Controllers\OrderController@destroy');
@@ -130,6 +133,7 @@ Route::group(['prefix' => 'products'], function () {
     Route::get('/hotdeals', 'App\Http\Controllers\ProductController@hotDeals');
     Route::post('/listings', 'App\Http\Controllers\ProductController@getProductsListings');
     Route::post('/related', 'App\Http\Controllers\ProductController@getRelatedProducts');
+    Route::post('/recent', 'App\Http\Controllers\ProductController@getRecentlyViewed');
     Route::get('/{product}', 'App\Http\Controllers\ProductController@getProduct');
 });
 
@@ -139,6 +143,19 @@ Route::group(['prefix' => 'products', 'middleware' => ['auth:sanctum']], functio
     Route::post('/delete/{product?}', 'App\Http\Controllers\ProductController@destroy');
     Route::post('/enable/{product?}', 'App\Http\Controllers\ProductController@enable');
     Route::post('/disable/{product?}', 'App\Http\Controllers\ProductController@disable');
+});
+
+Route::group(['prefix' => 'reviews'], function () {
+    Route::get('/', 'App\Http\Controllers\ReviewController@index');
+    Route::get('/product/{product_id}', 'App\Http\Controllers\ReviewController@getProductReviews');
+});
+
+Route::group(['prefix' => 'reviews', 'middleware' => ['auth:sanctum']], function () {
+    Route::post('/create', 'App\Http\Controllers\ReviewController@store');
+    Route::get('/user', 'App\Http\Controllers\ReviewController@getUserReviews');
+    Route::post('/update/{review}', 'App\Http\Controllers\ReviewController@update');
+    Route::get('/check/{product_id}', 'App\Http\Controllers\ReviewController@checkReviewed');
+    Route::get('/delete/{review}', 'App\Http\Controllers\ReviewController@destroy');
 });
 
 Route::group(['prefix' => 'artisans', 'middleware' => ['auth:sanctum']], function () {

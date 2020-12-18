@@ -20,6 +20,10 @@ class OrderController extends Controller
     }
 
 
+    public function getOrder(){
+        $data = auth()->user()->order()->with('user')->get();
+        return response()->json(['data' => $data, 'message' => 'Orders Retreived'], 200);
+    }
     /**
      * Store a newly created resource in storage.
      *

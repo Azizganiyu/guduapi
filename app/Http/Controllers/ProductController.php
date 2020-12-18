@@ -18,7 +18,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::with('category', 'modell', 'year', 'make','part', 'condition', 'part')->paginate(20);
+        $data = Product::with('category', 'modell', 'year', 'make','part', 'condition', 'part', 'reviews')
+        ->withCount('reviews')
+        ->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Products Retreived'], 200);
     }
 
@@ -157,18 +159,19 @@ class ProductController extends Controller
     }
 
     public function trending(Category $category){
-        $products = $category->products()->limit(4)->orderBy('id', 'desc')->get();
+        $products = $category->products()->with('reviews')->limit(4)->orderBy('id', 'desc')->get();
         return response()->json(['data' => $products,'message' => 'Product(s) successfull retreived'], 200);
     }
 
     public function hotDeals(){
-        $products = Product::limit(2)->get();
+        $products = Product::limit(2)->with('reviews')->get();
         return response()->json(['data' => $products,'message' => 'Product(s) successfull retreived'], 200);
     }
 
     public function getProductByUrl($url){
         $data = Product::where('friendly_url', $url)
-        ->with('category', 'modell', 'year', 'make','part', 'condition', 'part')
+        ->withCount('reviews')
+        ->with('category', 'modell', 'year', 'make','part', 'condition', 'part', 'reviews')
         ->first();
         if($data){
             return response()->json(['data' => $data,'message' => 'Product successfull retreived'], 200);
@@ -224,32 +227,32 @@ class ProductController extends Controller
                         $condition = $part->where('condition_id', $request->condition);
 
                         if($condition->count() > 0){
-                            return response()->json(['data' => $condition->paginate(20), 'message' => 'Product Retreived'], 200);
+                            return response()->json(['data' => $condition->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
                         }
                         else{
-                            return response()->json(['data' => $part->paginate(20), 'message' => 'Product Retreived'], 200);
+                            return response()->json(['data' => $part->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
                         }
                     }
                     else{
-                        return response()->json(['data' => $part->paginate(20), 'message' => 'Product Retreived'], 200);
+                        return response()->json(['data' => $part->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
                     }
                 }
                 else{
-                    return response()->json(['data' => $data->paginate(20), 'message' => 'Product Retreived'], 200);
+                    return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
                 }
             }
             if($request->condition){
                 $condition = $data->where('condition_id', $request->condition);
 
                 if($condition->count() > 0){
-                    return response()->json(['data' => $condition->paginate(20), 'message' => 'Product Retreived'], 200);
+                    return response()->json(['data' => $condition->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
                 }
                 else{
-                    return response()->json(['data' => $data->paginate(20), 'message' => 'Product 5 Retreived'], 200);
+                    return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product 5 Retreived'], 200);
                 }
             }
 
-            return response()->json(['data' => $data->paginate(20), 'message' => 'Product Retreived'], 200);
+            return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
         }
         else{
             return response()->json(['message' => 'Product not found'], 404);
@@ -281,19 +284,24 @@ class ProductController extends Controller
                 $part->where('part_id', $request->part);
                 if($part->count() > 0){
 
-                    return response()->json(['data' => $part->limit(4)->get(), 'message' => 'Product Retreived'], 200);
+                    return response()->json(['data' => $part->limit(4)->with('reviews')->get(), 'message' => 'Product Retreived'], 200);
 
                 }
                 else{
-                    return response()->json(['data' => $data->limit(4)->get(), 'message' => 'Product Retreived'], 200);
+                    return response()->json(['data' => $data->limit(4)->with('reviews')->get(), 'message' => 'Product Retreived'], 200);
                 }
             }
-            return response()->json(['data' => $data->limit(4)->get(), 'message' => 'Product Retreived'], 200);
+            return response()->json(['data' => $data->limit(4)->with('reviews')->get(), 'message' => 'Product Retreived'], 200);
         }
         else{
-            return response()->json(['data' => $request->all(), 'message' => 'Product not found'], 404);
+            return response()->json(['message' => 'Product not found'], 404);
         }
 
+    }
+
+    public function getRecentlyViewed(Request $request){
+        $product = Product::with('reviews')->find($request->ids);
+        return response()->json(['data' => $product, 'message' => 'Products Retreived'], 200);
     }
 
 }
