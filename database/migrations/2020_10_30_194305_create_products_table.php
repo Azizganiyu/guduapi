@@ -27,7 +27,6 @@ class CreateProductsTable extends Migration
             $table->foreign('part_id')->references('id')->on('parts');
             $table->foreign('year_id')->references('id')->on('years');
             $table->foreign('modell_id')->references('id')->on('modells');
-            $table->foreign('year_id')->references('id')->on('years');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
