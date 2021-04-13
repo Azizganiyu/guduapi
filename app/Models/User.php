@@ -26,7 +26,6 @@ class User extends Authenticatable
         'status',
         'photo_url',
         'username',
-
     ];
 
     /**
