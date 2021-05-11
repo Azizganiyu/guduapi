@@ -19,6 +19,11 @@ class PartController extends Controller
         return response()->json(['data' => $data, 'message' => 'Parts Retreived'], 200);
     }
 
+    public function getByCategory($category)
+    {
+        $data = Part::where('category_id', $category)->get();
+        return response()->json(['data' => $data, 'message' => 'Parts Retreived'], 200);
+    }
 
     /**
      * Store a newly created resource in storage.

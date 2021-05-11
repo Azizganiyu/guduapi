@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Make;
+use App\Models\Modell;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +75,8 @@ Route::group(['prefix' => 'conditions', 'middleware' => ['auth:sanctum']], funct
 
 Route::group(['prefix' => 'makes'], function () {
     Route::get('/', 'App\Http\Controllers\MakeController@index');
+    Route::get('/all', 'App\Http\Controllers\MakeController@getAll');
+    Route::get('/category/{category}', 'App\Http\Controllers\MakeController@getByCategory');
 });
 
 Route::group(['prefix' => 'makes', 'middleware' => ['auth:sanctum']], function () {
@@ -82,6 +87,7 @@ Route::group(['prefix' => 'makes', 'middleware' => ['auth:sanctum']], function (
 
 Route::group(['prefix' => 'models'], function () {
     Route::get('/', 'App\Http\Controllers\ModellController@index');
+    Route::get('/make/{make}', 'App\Http\Controllers\ModellController@getByMake');
 });
 
 Route::group(['prefix' => 'models', 'middleware' => ['auth:sanctum']], function () {
@@ -92,6 +98,7 @@ Route::group(['prefix' => 'models', 'middleware' => ['auth:sanctum']], function 
 
 Route::group(['prefix' => 'parts'], function () {
     Route::get('/', 'App\Http\Controllers\PartController@index');
+    Route::get('/category/{category}', 'App\Http\Controllers\PartController@getByCategory');
 });
 
 Route::group(['prefix' => 'parts', 'middleware' => ['auth:sanctum']], function () {
@@ -103,6 +110,7 @@ Route::group(['prefix' => 'parts', 'middleware' => ['auth:sanctum']], function (
 Route::group(['prefix' => 'years'], function () {
     Route::get('/', 'App\Http\Controllers\YearController@index');
     Route::get('/groupedyears/{model}', 'App\Http\Controllers\YearController@getGroupedYears');
+    Route::get('/model/{model}', 'App\Http\Controllers\YearController@getByModel');
 });
 
 Route::group(['prefix' => 'years', 'middleware' => ['auth:sanctum']], function () {
@@ -189,3 +197,23 @@ Route::middleware('auth:sanctum')->get('/logout', 'App\Http\Controllers\AuthCont
 // Route::post('login', function () {
 //     return 'hello world';
 // });
+
+Route::post('/set_makes_models', function (Request $make) {
+    $newMake = new Make();
+    $newMake->id = $make['Make_ID'];
+    $newMake->name = $make['Make_Name'];
+    $newMake->category_id = 1;
+    $newMake->user_id = 1;
+    $newMake->save();
+    $models = Http::get('https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeId/'.$make['Make_ID'].'?format=json');
+    foreach($models['Results'] as $model){
+        $newModel = new Modell();
+        $newModel->id = $model['Model_ID'];
+        $newModel->name = $model['Model_Name'];
+        $newModel->make_id = $model['Make_ID'];
+        $newModel->category_id = 1;
+        $newModel->user_id = 1;
+        $newModel->save();
+    }
+    return response()->json(['message' => 'data successfully uploaded'], 201);
+});

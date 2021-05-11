@@ -19,6 +19,11 @@ class ModellController extends Controller
         return response()->json(['data' => $data, 'message' => 'Models Retreived'], 200);
     }
 
+    public function getByMake($make)
+    {
+        $data = Modell::where('make_id', $make)->get();
+        return response()->json(['data' => $data, 'message' => 'models Retreived'], 200);
+    }
 
     /**
      * Store a newly created resource in storage.

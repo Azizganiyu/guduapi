@@ -20,6 +20,19 @@ class MakeController extends Controller
     }
 
 
+    public function getAll()
+    {
+        $data = Make::get();
+        return response()->json(['data' => $data, 'message' => 'makes Retreived'], 200);
+    }
+
+    public function getByCategory($category)
+    {
+        $data = Make::where('category_id', $category)->get();
+        return response()->json(['data' => $data, 'message' => 'makes Retreived'], 200);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *

@@ -19,6 +19,10 @@ class YearController extends Controller
        return response()->json(['data' => $data, 'message' => 'Years Retreived'], 200);
    }
 
+   public function getByModel($model){
+    $data = Year::where('modell_id', $model)->get();
+    return response()->json(['data' => $data, 'message' => 'Years Retreived'], 200);
+   }
 
    /**
     * Store a newly created resource in storage.
