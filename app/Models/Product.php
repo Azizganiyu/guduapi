@@ -50,9 +50,6 @@ class Product extends Model
     public function part(){
         return $this->hasOne(Part::class, 'id', 'part_id');
     }
-    public function year(){
-        return $this->hasOne(Year::class, 'id', 'year_id');
-    }
 
     public function reviews(){
         return $this->hasMany(Review::class);

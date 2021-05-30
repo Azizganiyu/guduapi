@@ -26,8 +26,4 @@ class Modell extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
-
-    public function years(){
-        return $this->hasMany(Year::class);
-    }
 }

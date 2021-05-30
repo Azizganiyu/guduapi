@@ -107,18 +107,6 @@ Route::group(['prefix' => 'parts', 'middleware' => ['auth:sanctum']], function (
     Route::post('/delete/{part?}', 'App\Http\Controllers\PartController@destroy');
 });
 
-Route::group(['prefix' => 'years'], function () {
-    Route::get('/', 'App\Http\Controllers\YearController@index');
-    Route::get('/groupedyears/{model}', 'App\Http\Controllers\YearController@getGroupedYears');
-    Route::get('/model/{model}', 'App\Http\Controllers\YearController@getByModel');
-});
-
-Route::group(['prefix' => 'years', 'middleware' => ['auth:sanctum']], function () {
-    Route::post('/create', 'App\Http\Controllers\YearController@store');
-    Route::post('/update/{year}', 'App\Http\Controllers\YearController@update');
-    Route::post('/delete/{year?}', 'App\Http\Controllers\YearController@destroy');
-});
-
 
 Route::group(['prefix' => 'artisan_request', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', 'App\Http\Controllers\ArtisanRequestController@index');
@@ -184,6 +172,14 @@ Route::group(['prefix' => 'gallery', 'middleware' => ['auth:sanctum']], function
 
 Route::group(['prefix' => 'dashboard', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/analytics', 'App\Http\Controllers\Dashboard@getAnalytics');
+});
+
+Route::group(['prefix' => 'payment', 'middleware' => ['auth:sanctum']], function () {
+    Route::post('/flutter_pay', 'App\Http\Controllers\PaymentController@flutterPay');
+});
+
+Route::group(['prefix' => 'payment'], function () {
+    Route::get('/verify_flutter_pay/{ref}', 'App\Http\Controllers\PaymentController@verifyFlutterPay');
 });
 
 //Route::middleware('auth:sanctum')->get('/users', 'App\Http\Controllers\UserController@index');

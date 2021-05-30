@@ -18,14 +18,13 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('modell_id')->nullable();
             $table->unsignedBigInteger('part_id');
-            $table->unsignedBigInteger('year_id')->nullable();
+            $table->integer('year')->nullable();
             $table->unsignedBigInteger('condition_id');
             $table->unsignedBigInteger('make_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('make_id')->references('id')->on('makes');
             $table->foreign('condition_id')->references('id')->on('conditions');
             $table->foreign('part_id')->references('id')->on('parts');
-            $table->foreign('year_id')->references('id')->on('years');
             $table->foreign('modell_id')->references('id')->on('modells');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('user_id')->references('id')->on('users');
@@ -38,6 +37,7 @@ class CreateProductsTable extends Migration
             $table->integer('weight')->nullable();
             $table->integer('depth')->nullable();
             $table->integer('discount')->default(0);
+            $table->integer('rating')->default(0);
             $table->integer('quantity');
             $table->integer('price');
             $table->text('tags')->nullable();

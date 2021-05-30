@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::with('category', 'modell', 'year', 'make','part', 'condition', 'part', 'reviews')
+        $data = Product::with('category', 'modell', 'make','part', 'condition', 'part', 'reviews')
         ->withCount('reviews')
         ->paginate(20);
         return response()->json(['data' => $data, 'message' => 'Products Retreived'], 200);
@@ -62,7 +62,7 @@ class ProductController extends Controller
         $product->make_id = $request->make_id;
         $product->part_id = $request->part_id;
         $product->modell_id = $request->modell_id;
-        $product->year_id = $request->year_id;
+        $product->year = $request->year;
         $product->vin_tag = $request->vin_tag;
         $product->part_number = $request->part_number;
         $product->images = $request->images;
@@ -103,7 +103,7 @@ class ProductController extends Controller
         $product->make_id = $request->make_id;
         $product->part_id = $request->part_id;
         $product->modell_id = $request->modell_id;
-        $product->year_id = $request->year_id;
+        $product->year = $request->year;
         $product->vin_tag = $request->vin_tag;
         $product->part_number = $request->part_number;
         $product->images = $request->images;
@@ -171,7 +171,7 @@ class ProductController extends Controller
     public function getProductByUrl($url){
         $data = Product::where('friendly_url', $url)
         ->withCount('reviews')
-        ->with('category', 'modell', 'year', 'make','part', 'condition', 'part', 'reviews')
+        ->with('category', 'modell', 'make','part', 'condition', 'part', 'reviews')
         ->first();
         if($data){
             return response()->json(['data' => $data,'message' => 'Product successfull retreived'], 200);
@@ -188,76 +188,39 @@ class ProductController extends Controller
 
     public function getProductsListings(Request $request){
 
-        $vin_number = trim($request->vin_number);
-        $part_number = trim($request->part_number);
+        // $vin_number = trim($request->vin_number);
+        // $part_number = trim($request->part_number);
 
-        $data_len = 0;
-        $data = null;
+        $query = Product::query();
 
-        if(strlen($vin_number) > 0){
-            $data = product::where('vin_tag', $request->vin_number);
-            $data_len = $data->count();
-        }
-        if($data_len === 0 && strlen($part_number) > 0){
-            $data = product::where('part_number', $request->part_number);
-            $data_len = $data->count();
-        }
-        if($data_len === 0 && $request->year){
-            $data = product::where('year_id', $request->year);
-            $data_len = $data->count();
-        }
-        if($data_len === 0 && $request->model){
-            $data = product::where('modell_id', $request->model);
-            $data_len = $data->count();
-        }
-        if($data_len === 0 && $request->make){
-            $data = product::where('make_id', $request->make);
-            $data_len = $data->count();
-        }
-        if($data_len === 0 && $request->category){
-            $data = product::where('category_id', $request->category);
-            $data_len = $data->count();
-        }
-        if($data_len > 0){
-            if($request->part){
-                $part = $data->where('part_id', $request->part);
-                if($part->count() > 0){
 
-                    if($request->condition){
-                        $condition = $part->where('condition_id', $request->condition);
+        $query->when($request->category, function ($q) use ($request) {
+            return $q->where('category_id', $request->category);
+        });
 
-                        if($condition->count() > 0){
-                            return response()->json(['data' => $condition->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-                        }
-                        else{
-                            return response()->json(['data' => $part->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-                        }
-                    }
-                    else{
-                        return response()->json(['data' => $part->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-                    }
-                }
-                else{
-                    return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-                }
-            }
-            if($request->condition){
-                $condition = $data->where('condition_id', $request->condition);
+        $query->when($request->year, function ($q) use ($request) {
+            return $q->where('year', $request->year);
+        });
 
-                if($condition->count() > 0){
-                    return response()->json(['data' => $condition->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-                }
-                else{
-                    return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product 5 Retreived'], 200);
-                }
-            }
+        $query->when($request->make, function ($q) use ($request) {
+            return $q->where('make_id', $request->make);
+        });
 
-            return response()->json(['data' => $data->with('reviews')->paginate(20), 'message' => 'Product Retreived'], 200);
-        }
-        else{
-            return response()->json(['message' => 'Product not found'], 404);
-        }
+        $query->when($request->model, function ($q) use ($request) {
+            return $q->where('modell_id', $request->model);
+        });
 
+        $query->when($request->condition, function ($q) use ($request) {
+            return $q->where('condition_id', $request->condition);
+        });
+
+        $query->when($request->condition, function ($q) use ($request) {
+            return $q->where('condition_id', $request->condition);
+        });
+
+        $data = $query->with('reviews')->paginate(20);
+
+        return response()->json(['data' => $data, 'message' => 'Product Retreived'], 200);
     }
 
     public function getRelatedProducts(Request $request){
